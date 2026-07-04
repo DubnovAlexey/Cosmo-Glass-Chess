@@ -270,6 +270,12 @@ body {
     box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
 }
 
+.btn-start:disabled {
+    background: rgba(0, 255, 136, 0.1);
+    color: rgba(255, 255, 255, 0.4);
+    box-shadow: none;
+    cursor: not-allowed;
+}
 /* ==========================================================================
    6. SVG PIECES IMAGE MAPPING
    ========================================================================== */

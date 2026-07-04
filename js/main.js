@@ -78,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.isGameActive = false;
         clearInterval(window.timerInterval);
 
+        document.getElementById('btn-start').disabled = false;
+
         let minutes = parseFloat(timeInput.value);
         if (isNaN(minutes) || minutes <= 0) minutes = 10;
         const totalSeconds = Math.floor(minutes * 60);

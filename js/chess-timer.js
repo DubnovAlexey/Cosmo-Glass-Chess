@@ -45,5 +45,9 @@ window.startTimerCountdown = function() {
 window.endGame = function(message) {
     clearInterval(window.timerInterval);
     window.isGameActive = false;
+
+    const btnStart = document.getElementById('btn-start');
+    if (btnStart) btnStart.disabled = false;
+
     alert(message);
 };
