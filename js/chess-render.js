@@ -1,10 +1,10 @@
 /* ==========================================================================
-   CHESS RENDER MODULE: Board rendering and Click-to-Move logic
+   CHESS RENDER MODULE: Board Generation and Tap-to-Move Interaction
    ========================================================================== */
 
+// 1. DOM ELEMENTS & CONSTANTS
 const chessboard = document.getElementById('chessboard');
 
-// Mapping dictionary to convert chess.js short types to full image names
 const PIECE_MAP = {
     'p': 'pawn',
     'r': 'rook',
@@ -14,107 +14,103 @@ const PIECE_MAP = {
     'k': 'king'
 };
 
-// Global state for Tap-to-Move logic
-window.selectedSquare = null; // Will store the currently selected square (e.g., 'e2')
+// Global state for selected square (e.g., 'e2')
+window.selectedSquare = null;
 
+// 2. BOARD RENDERING
 function renderBoard() {
     if (!chessboard) return;
-    chessboard.innerHTML = ''; // Clear board before re-rendering
+    chessboard.innerHTML = '';
 
     const board = window.getBoardMatrix();
-    // Arrays to calculate standard chess notation coordinates
     const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
-    for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
+    // Generate 64 squares
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            // Adjust coordinates if board is flipped
+            const r = window.isBoardFlipped ? 7 - i : i;
+            const c = window.isBoardFlipped ? 7 - j : j;
+
             const tile = document.createElement('div');
-            // Assign alternating colors to tiles
             tile.className = `board-tile ${(r + c) % 2 === 0 ? 'tile-light' : 'tile-dark'}`;
             tile.dataset.row = r;
             tile.dataset.col = c;
 
-            // Calculate and assign the standard algebraic notation (e.g., 'e2', 'a8')
             const squareId = files[c] + ranks[r];
             tile.dataset.square = squareId;
 
+            // Render piece if exists
             const piece = board[r][c];
             if (piece) {
                 const pDiv = document.createElement('div');
                 const pieceClassName = `${piece.color}_${PIECE_MAP[piece.type]}`;
                 pDiv.className = `chess-piece ${pieceClassName}`;
-
-                // Note: draggable="true" and drag listeners have been removed for unified click logic
                 tile.appendChild(pDiv);
             }
 
-            // Universal listener for both Desktop clicks and Mobile taps
+            // Attach universal click/tap listener
             tile.addEventListener('click', () => handleSquareClick(squareId, r, c));
             chessboard.appendChild(tile);
         }
     }
 }
 
+// 3. TAP-TO-MOVE LOGIC
 function handleSquareClick(squareId, row, col) {
     if (!window.isGameActive) return;
 
-    // 1. Если какая-то фигура УЖЕ была выбрана на предыдущем шаге
+    // Case A: A piece is already selected
     if (window.selectedSquare) {
-
-        // Пытаемся сделать ход средствами библиотеки chess.js
         const moveAttempt = window.game.move({
             from: window.selectedSquare,
             to: squareId,
-            promotion: 'q' // Авто-превращение пешки в ферзя (queen)
+            promotion: 'q' // Auto-promote to queen
         });
 
         if (moveAttempt) {
-            // УСПЕХ: Ход валидный и выполнен
+            // Valid move executed
             window.selectedSquare = null;
-            renderBoard(); // Перерисовываем доску (подсветка исчезнет при перерисовке)
+            renderBoard();
             if (typeof window.updateTimerVisualActiveState === 'function') {
                 window.updateTimerVisualActiveState();
             }
         } else {
-            // ОШИБКА: Ход невалидный.
-            // Проверяем: может игрок просто передумал и кликнул на другую СВОЮ фигуру?
+            // Invalid move: check if clicked on another own piece
             const piece = window.game.get(squareId);
             if (piece && piece.color === window.game.turn()) {
-                window.selectedSquare = squareId; // Выбираем новую фигуру
-                highlightValidMoves(squareId);    // Подсвечиваем её ходы
+                window.selectedSquare = squareId;
+                highlightValidMoves(squareId);
             } else {
-                // Иначе просто отменяем выделение (например, клик в пустоту)
+                // Cancel selection
                 window.selectedSquare = null;
-                renderBoard(); // Перерисовываем, чтобы сбросить старую подсветку
+                renderBoard();
             }
         }
     } else {
-        // 2. Если ничего не выбрано (первый клик)
-        // Проверяем, есть ли на клетке своя фигура (совпадает ли цвет фигуры с текущим ходом)
+        // Case B: No piece selected yet
         const piece = window.game.get(squareId);
         if (piece && piece.color === window.game.turn()) {
-            window.selectedSquare = squareId; // Сохраняем ID клетки (например, 'e2')
-            highlightValidMoves(squareId);    // Запускаем подсветку
+            window.selectedSquare = squareId;
+            highlightValidMoves(squareId);
         }
     }
 }
 
-// Функция для добавления зеленой рамки возможным ходам
+// 4. VISUAL FEEDBACK (HIGHLIGHTS)
 function highlightValidMoves(squareId) {
-    // 1. Сначала очищаем старую подсветку со всех клеток
+    // Clear previous highlights
     document.querySelectorAll('.board-tile').forEach(tile => {
         tile.classList.remove('highlight-selected', 'highlight-move');
     });
 
-    // 2. Подсвечиваем саму выбранную фигуру (чтобы понимать, за кого ходим)
+    // Highlight selected piece
     const selectedTile = document.querySelector(`.board-tile[data-square="${squareId}"]`);
     if (selectedTile) selectedTile.classList.add('highlight-selected');
 
-    // 3. Получаем список доступных ходов.
-    // Флаг verbose (вербо́уз — подробный) возвращает ходы в виде объектов с детальной инфой
+    // Get and highlight possible moves
     const moves = window.game.moves({ square: squareId, verbose: true });
-
-    // 4. Проходимся по массиву ходов и добавляем класс подсветки нужным клеткам
     moves.forEach(move => {
         const targetTile = document.querySelector(`.board-tile[data-square="${move.to}"]`);
         if (targetTile) {

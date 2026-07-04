@@ -347,3 +347,76 @@ body {
     pointer-events: none; /* pointer-events (по́интер иве́нтс) отключает клики по рамке, пропуская их на саму клетку */
     z-index: 5;
 }
+
+.cyber-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 25px;
+    background: #110f1a;
+    border: 2px solid #00ff88;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+    color: #ffffff;
+    width: 280px;
+    max-width: 90%;
+    z-index: 1000;
+}
+
+.cyber-modal::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(6px);
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+}
+
+.modal-content h2 {
+    font-size: 1.2rem;
+    color: #00ff88;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.time-input {
+    width: 100%;
+    padding: 10px;
+    background: #1a1726;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 1.3rem;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+.time-input::-webkit-outer-spin-button,
+.time-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.time-input:focus {
+    outline: none;
+    border-color: #00ff88;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.modal-actions .btn {
+    flex: 1;
+    padding: 8px;
+    font-size: 0.9rem;
+}
