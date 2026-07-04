@@ -308,3 +308,11 @@ body {
 .board-tile[data-row="7"][data-col="5"]::after, .board-tile[data-row="0"][data-col="5"]::after { content: "F"; }
 .board-tile[data-row="7"][data-col="6"]::after, .board-tile[data-row="0"][data-col="6"]::after { content: "G"; }
 .board-tile[data-row="7"][data-col="7"]::after, .board-tile[data-row="0"][data-col="7"]::after { content: "H"; }
+
+@media (max-width: 650px) {
+    .board-wrapper {
+        width: 100%;
+        max-width: 620px;
+        aspect-ratio: 1 / 1;
+    }
+}
