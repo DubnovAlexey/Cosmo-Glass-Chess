@@ -284,3 +284,83 @@ body {
         letter-spacing: 3px;
     }
 }
+/* ==========================================================================
+   8. CYBER MODAL (DIALOG) STYLING
+   ========================================================================== */
+.cyber-modal {
+    margin: auto; /* Автоматически центрирует окно на экране */
+    padding: 0;
+    border: 2px solid #00ff88;
+    border-radius: 12px;
+    background: #14121f;
+    color: #ffffff;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+}
+
+/* ==========================================================================
+   7. CYBER MODAL (DIALOG) STYLING
+   ========================================================================== */
+.cyber-modal {
+    /* Automatically centers the modal window in the viewport */
+    margin: auto;
+    padding: 0;
+    border: 2px solid #00ff88;
+    border-radius: 12px;
+    background: #14121f;
+    color: #ffffff;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+}
+
+/* The ::backdrop pseudo-element dims the rest of the application behind the modal */
+.cyber-modal::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.modal-content h2 {
+    font-size: 1.5rem;
+    color: #9d4ede;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.input-group {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.time-input {
+    width: 120px;
+    padding: 12px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.time-input:focus {
+    border-color: #00ff88;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
