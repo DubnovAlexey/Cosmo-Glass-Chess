@@ -1,0 +1,310 @@
+/* ==========================================================================
+   1. GLOBAL REBOOT & SPACE BACKGROUND
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+    background: radial-gradient(circle at center, #14121f 0%, #05040a 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.chess-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px;
+    padding: 20px;
+    gap: 20px;
+}
+
+.chess-title {
+    font-size: 2.2rem;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    background: linear-gradient(90deg, #00ff88, #9d4ede);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 20px rgba(0, 255, 136, 0.15);
+}
+
+/* ==========================================================================
+   2. CENTRALIZED GAME LAYOUT WITH GRAVEYARD ZONES
+   ========================================================================== */
+
+.game-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.board-area-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    width: 100%;
+}
+
+.graveyard {
+    width: 60px;
+    height: 620px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    gap: 5px;
+}
+
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 620px;
+    gap: 15px;
+}
+
+.timers-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+}
+
+.timer-card {
+    flex: 1;
+    padding: 10px 20px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    font-family: monospace;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.01);
+}
+
+.timer-white {
+    border-left: 4px solid #ffffff;
+}
+
+.timer-black {
+    border-left: 4px solid #9d4ede;
+}
+
+.active-turn {
+    background: rgba(0, 255, 136, 0.05);
+    border-color: rgba(0, 255, 136, 0.3);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+}
+
+/* ==========================================================================
+   3. SOLID MONOLITH CHESSBOARD WITH ADVANCED VOLUME BEVEL ENGINE
+   ========================================================================== */
+
+.board-wrapper {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    width: 620px;
+    height: 620px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 30px solid #1c1a27;
+    border-radius: 16px;
+    position: relative;
+    outline: 1px solid rgba(255, 255, 255, 0.22);
+    outline-offset: 6px;
+    box-shadow:
+            0 0 0 6px #0d0c14,
+            0 20px 35px rgba(0, 0, 0, 0.9),
+            0 0 25px rgba(255, 255, 255, 0.32),
+            0 0 55px rgba(255, 255, 255, 0.15),
+            inset 0 0 20px rgba(0, 0, 0, 0.75);
+}
+
+.tile-light {
+    background-color: rgba(255, 255, 255, 0.75);
+    color: #14121f;
+}
+
+.tile-dark {
+    background-color: rgba(35, 32, 50, 0.85);
+}
+
+.board-tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.2s ease;
+}
+
+.board-tile:hover {
+    background-color: rgba(0, 255, 136, 0.2) !important;
+}
+
+/* ==========================================================================
+   4. PIECE RENDERING
+   ========================================================================== */
+
+.chess-piece {
+    width: 85%;
+    height: 85%;
+    cursor: grab;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.1s ease;
+    z-index: 2;
+}
+
+.chess-piece:active {
+    cursor: grabbing;
+    transform: scale(1.08);
+}
+
+/* Updated to match the single letter color format */
+.b_pawn, .b_rook, .b_knight, .b_bishop, .b_queen, .b_king {
+    filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.95))
+    drop-shadow(0px 0px 3px rgba(157, 78, 221, 0.5));
+}
+
+/* ==========================================================================
+   5. FOOTER CONTROLS
+   ========================================================================== */
+
+.controls-container {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #ffffff;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+.btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-start {
+    background: #00ff88;
+    color: #000000;
+    border: none;
+}
+
+.btn-start:hover {
+    background: #00cc6e;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* ==========================================================================
+   6. SVG PIECES IMAGE MAPPING (Updated to match exact file names)
+   ========================================================================== */
+
+.w_pawn   { background-image: url('../assets/images/w_pawn.svg.webp'); }
+.b_pawn   { background-image: url('../assets/images/b_pawn.svg.webp'); }
+.w_rook   { background-image: url('../assets/images/w_rook.svg.webp'); }
+.b_rook   { background-image: url('../assets/images/b_rook.svg.webp'); }
+.w_knight { background-image: url('../assets/images/w_knight.svg.webp'); }
+.b_knight { background-image: url('../assets/images/b_knight.svg.webp'); }
+.w_bishop { background-image: url('../assets/images/w_bishop.svg.webp'); }
+.b_bishop { background-image: url('../assets/images/b_bishop.svg.webp'); }
+.w_queen  { background-image: url('../assets/images/w_queen.svg.webp'); }
+.b_queen  { background-image: url('../assets/images/b_queen.svg.webp'); }
+.w_king   { background-image: url('../assets/images/w_king.svg.webp'); }
+.b_king   { background-image: url('../assets/images/b_king.svg.webp'); }
+
+/* ==========================================================================
+   7. FOUR-WAY BOARD NOTATION SYSTEM (LABELS)
+   ========================================================================== */
+
+.board-tile[data-col="0"]::before {
+    position: absolute;
+    left: -22px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.board-tile[data-col="7"]::before {
+    position: absolute;
+    right: -22px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.board-tile[data-row="7"]::after {
+    position: absolute;
+    left: 50%;
+    bottom: -24px;
+    transform: translateX(-50%);
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.board-tile[data-row="0"]::after {
+    position: absolute;
+    left: 50%;
+    top: -24px;
+    transform: translateX(-50%);
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.board-tile[data-row="0"][data-col="0"]::before, .board-tile[data-row="0"][data-col="7"]::before { content: "8"; }
+.board-tile[data-row="1"][data-col="0"]::before, .board-tile[data-row="1"][data-col="7"]::before { content: "7"; }
+.board-tile[data-row="2"][data-col="0"]::before, .board-tile[data-row="2"][data-col="7"]::before { content: "6"; }
+.board-tile[data-row="3"][data-col="0"]::before, .board-tile[data-row="3"][data-col="7"]::before { content: "5"; }
+.board-tile[data-row="4"][data-col="0"]::before, .board-tile[data-row="4"][data-col="7"]::before { content: "4"; }
+.board-tile[data-row="5"][data-col="0"]::before, .board-tile[data-row="5"][data-col="7"]::before { content: "3"; }
+.board-tile[data-row="6"][data-col="0"]::before, .board-tile[data-row="6"][data-col="7"]::before { content: "2"; }
+.board-tile[data-row="7"][data-col="0"]::before, .board-tile[data-row="7"][data-col="7"]::before { content: "1"; }
+
+.board-tile[data-row="7"][data-col="0"]::after, .board-tile[data-row="0"][data-col="0"]::after { content: "A"; }
+.board-tile[data-row="7"][data-col="1"]::after, .board-tile[data-row="0"][data-col="1"]::after { content: "B"; }
+.board-tile[data-row="7"][data-col="2"]::after, .board-tile[data-row="0"][data-col="2"]::after { content: "C"; }
+.board-tile[data-row="7"][data-col="3"]::after, .board-tile[data-row="0"][data-col="3"]::after { content: "D"; }
+.board-tile[data-row="7"][data-col="4"]::after, .board-tile[data-row="0"][data-col="4"]::after { content: "E"; }
+.board-tile[data-row="7"][data-col="5"]::after, .board-tile[data-row="0"][data-col="5"]::after { content: "F"; }
+.board-tile[data-row="7"][data-col="6"]::after, .board-tile[data-row="0"][data-col="6"]::after { content: "G"; }
+.board-tile[data-row="7"][data-col="7"]::after, .board-tile[data-row="0"][data-col="7"]::after { content: "H"; }
