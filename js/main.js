@@ -24,6 +24,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnConfirmSettings = document.getElementById('btn-confirm-settings');
     const btnPause = document.getElementById('btn-pause');
 
+    // NEW: Getting Start and Restart buttons for the UI Manager
+    const btnStart = document.getElementById('btn-start');
+    const btnRestart = document.getElementById('btn-restart');
+
+    // NEW: UI STATE MANAGER
+    // Central function to toggle button states based on game activity
+    function toggleInterface(isPlay) {
+        if (isPlay) {
+            btnStart.disabled = true; // Disable Start
+            btnOpenSettings.disabled = true; // Disable Settings
+            btnPause.disabled = false; // Enable Pause
+        } else {
+            btnStart.disabled = false; // Enable Start
+            btnOpenSettings.disabled = false; // Enable Settings
+            btnPause.disabled = true; // Disable Pause
+            btnPause.textContent = 'Pause'; // Reset Pause text
+        }
+    }
+
+    // Initialize interface on load (game is not active)
+    toggleInterface(false);
+
     // 3. SETTINGS MODAL LOGIC
     timeInput.addEventListener('focus', function() {
         this.select();
@@ -60,11 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 4. GAME CONTROLS LOGIC
-    document.getElementById('btn-start').addEventListener('click', () => {
+    btnStart.addEventListener('click', () => {
         if (!window.isGameActive) {
             window.isGameActive = true;
             window.startTimerCountdown();
-            btnPause.textContent = 'Pause';
+
+            // NEW: Update UI state to active
+            toggleInterface(true);
 
             // KICKSTART AI: If player is Black, AI is White and must move first
             if (window.playerColor === 'b') {
@@ -73,12 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.getElementById('btn-restart').addEventListener('click', () => {
+    btnRestart.addEventListener('click', () => {
         window.game.reset();
         window.isGameActive = false;
         clearInterval(window.timerInterval);
 
-        document.getElementById('btn-start').disabled = false;
+        // NEW: Update UI state to inactive
+        toggleInterface(false);
 
         let minutes = parseFloat(timeInput.value);
         if (isNaN(minutes) || minutes <= 0) minutes = 10;
@@ -87,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.blackTime = totalSeconds;
         timerW.textContent = formatTimeDisplay(totalSeconds);
         timerB.textContent = formatTimeDisplay(totalSeconds);
-        btnPause.textContent = 'Pause';
 
         // Ensure board orientation matches chosen color on restart
         window.isBoardFlipped = (window.playerColor === 'b');
