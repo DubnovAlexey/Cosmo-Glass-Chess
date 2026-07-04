@@ -27,13 +27,16 @@ function renderBoard() {
 
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
+            // Calculate logical orientation based on board flip status
             const r = window.isBoardFlipped ? 7 - i : i;
             const c = window.isBoardFlipped ? 7 - j : j;
 
             const tile = document.createElement('div');
             tile.className = `board-tile ${(r + c) % 2 === 0 ? 'tile-light' : 'tile-dark'}`;
-            tile.dataset.row = r.toString();
-            tile.dataset.col = c.toString();
+
+            // Fix: Bind data-attributes strictly to physical screen positions to prevent CSS shifting bugs
+            tile.dataset.row = i.toString();
+            tile.dataset.col = j.toString();
 
             const squareId = files[c] + ranks[r];
             tile.dataset.square = squareId;
@@ -46,7 +49,23 @@ function renderBoard() {
                 tile.appendChild(pDiv);
             }
 
-            // Updated: Removed unused row and col parameters
+            // Fix: Dynamic Chess Notation System (Labels generation)
+            // Left visual edge of the screen chessboard gets rank numbers
+            if (j === 0) {
+                const rankLabel = document.createElement('span');
+                rankLabel.className = 'coordinate rank-coordinate';
+                rankLabel.textContent = ranks[r];
+                tile.appendChild(rankLabel);
+            }
+
+            // Bottom visual edge of the screen chessboard gets file letters
+            if (i === 7) {
+                const fileLabel = document.createElement('span');
+                fileLabel.className = 'coordinate file-coordinate';
+                fileLabel.textContent = files[c];
+                tile.appendChild(fileLabel);
+            }
+
             tile.addEventListener('click', () => handleSquareClick(squareId));
             chessboard.appendChild(tile);
         }
@@ -54,7 +73,6 @@ function renderBoard() {
 }
 
 // 3. TAP-TO-MOVE LOGIC
-// Updated: Removed unused row and col parameters
 function handleSquareClick(squareId) {
     if (!window.isGameActive) return;
 
