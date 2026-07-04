@@ -24,26 +24,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnConfirmSettings = document.getElementById('btn-confirm-settings');
     const btnPause = document.getElementById('btn-pause');
 
-    // NEW: Getting Start and Restart buttons for the UI Manager
     const btnStart = document.getElementById('btn-start');
     const btnRestart = document.getElementById('btn-restart');
 
-    // NEW: UI STATE MANAGER
-    // Central function to toggle button states based on game activity
+    // UI STATE MANAGER
     function toggleInterface(isPlay) {
         if (isPlay) {
-            btnStart.disabled = true; // Disable Start
-            btnOpenSettings.disabled = true; // Disable Settings
-            btnPause.disabled = false; // Enable Pause
+            btnStart.disabled = true;
+            btnOpenSettings.disabled = true;
+            btnPause.disabled = false;
         } else {
-            btnStart.disabled = false; // Enable Start
-            btnOpenSettings.disabled = false; // Enable Settings
-            btnPause.disabled = true; // Disable Pause
-            btnPause.textContent = 'Pause'; // Reset Pause text
+            btnStart.disabled = false;
+            btnOpenSettings.disabled = false;
+            btnPause.disabled = true;
+            btnPause.textContent = 'Pause';
         }
     }
 
-    // Initialize interface on load (game is not active)
     toggleInterface(false);
 
     // 3. SETTINGS MODAL LOGIC
@@ -64,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     btnConfirmSettings.addEventListener('click', () => {
-        // Apply Time
         let minutes = parseFloat(timeInput.value);
         if (isNaN(minutes) || minutes <= 0) minutes = 10;
         const totalSeconds = Math.floor(minutes * 60);
@@ -73,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         timerW.textContent = formatTimeDisplay(totalSeconds);
         timerB.textContent = formatTimeDisplay(totalSeconds);
 
-        // Apply Color and flip board automatically if Black is chosen
         window.playerColor = colorSelect.value;
         window.isBoardFlipped = (window.playerColor === 'b');
         renderBoard();
@@ -87,10 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
             window.isGameActive = true;
             window.startTimerCountdown();
 
-            // NEW: Update UI state to active
             toggleInterface(true);
 
-            // KICKSTART AI: If player is Black, AI is White and must move first
             if (window.playerColor === 'b') {
                 document.dispatchEvent(new CustomEvent('chessMoveCompleted'));
             }
@@ -102,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.isGameActive = false;
         clearInterval(window.timerInterval);
 
-        // NEW: Update UI state to inactive
         toggleInterface(false);
 
         let minutes = parseFloat(timeInput.value);
@@ -113,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         timerW.textContent = formatTimeDisplay(totalSeconds);
         timerB.textContent = formatTimeDisplay(totalSeconds);
 
-        // Ensure board orientation matches chosen color on restart
         window.isBoardFlipped = (window.playerColor === 'b');
         renderBoard();
     });
@@ -127,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.startTimerCountdown();
             btnPause.textContent = 'Pause';
 
-            // Re-trigger AI just in case it was paused during its turn
             if (window.game.turn() !== window.playerColor) {
                 document.dispatchEvent(new CustomEvent('chessMoveCompleted'));
             }
@@ -137,5 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-flip').addEventListener('click', () => {
         window.isBoardFlipped = !window.isBoardFlipped;
         renderBoard();
+    });
+
+    // NEW: Event listener to catch the end of the game and unlock the UI
+    document.addEventListener('chessGameEnded', () => {
+        toggleInterface(false);
     });
 });

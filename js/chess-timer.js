@@ -46,8 +46,8 @@ window.endGame = function(message) {
     clearInterval(window.timerInterval);
     window.isGameActive = false;
 
-    const btnStart = document.getElementById('btn-start');
-    if (btnStart) btnStart.disabled = false;
+    // NEW: Trigger a global custom event to notify that the game is over
+    document.dispatchEvent(new CustomEvent('chessGameEnded'));
 
     alert(message);
 };

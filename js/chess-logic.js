@@ -21,6 +21,10 @@ window.engine.onmessage = function(event) {
 
             // Artificial delay of 600 milliseconds for AI move to feel natural
             setTimeout(() => {
+
+                // NEW: Hard block to prevent Race Condition if paused during calculation or timeout
+                if (!window.isGameActive) return;
+
                 const moveAttempt = window.game.move(moveStr, { sloppy: true });
 
                 // Contextual Audio Logic for AI moves

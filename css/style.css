@@ -12,11 +12,19 @@ body {
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #ffffff;
-    background: radial-gradient(circle at center, #14121f 0%, #05040a 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
+
+    /* NEW: Multiple backgrounds (Dark semi-transparent gradient overlay + Space image) */
+    background:
+            radial-gradient(circle at center, #2c1a4d 0%, #05040a 100%),
+            url('../assets/images/space-bg.jpg');
+    background-blend-mode: screen;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .chess-container {
@@ -62,8 +70,8 @@ body {
 .graveyard {
     width: 60px;
     height: 620px;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.4); /* Slightly darkened for contrast against space */
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -95,7 +103,7 @@ body {
     font-weight: bold;
     font-family: monospace;
     text-align: center;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(0, 0, 0, 0.4); /* Darkened container for background text protection */
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.01);
@@ -210,14 +218,13 @@ body {
     filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.95)) drop-shadow(0px 0px 3px rgba(157, 78, 221, 0.5));
 }
 
-/* NEW: Spotlight token style for captured pieces */
 .graveyard-piece {
     width: 42px;
     height: 42px;
     background-size: 75%;
     background-repeat: no-repeat;
     background-position: center;
-    background-color: rgba(255, 255, 255, 0.1); /* Soft spotlight background */
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
@@ -240,7 +247,7 @@ body {
     font-weight: bold;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(0, 0, 0, 0.3); /* Slightly darkened buttons for space readability */
     color: #ffffff;
     cursor: pointer;
     text-transform: uppercase;
@@ -276,6 +283,7 @@ body {
     box-shadow: none;
     cursor: not-allowed;
 }
+
 /* ==========================================================================
    6. SVG PIECES IMAGE MAPPING
    ========================================================================== */
@@ -390,7 +398,7 @@ body {
     width: 100%;
     margin-top: 10px;
 }
-/* Управление сеткой кнопок превращения */
+
 .promotion-options {
     display: flex;
     gap: 15px;
