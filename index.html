@@ -27,7 +27,7 @@
 
             <div class="controls-container">
                 <button class="btn btn-start" id="btn-start">Start Match</button>
-                <button class="btn btn-set" id="btn-open-time-modal">Set Time</button>
+                <button class="btn btn-set" id="btn-open-settings-modal">Settings</button>
                 <button class="btn" id="btn-restart">Restart</button>
                 <button class="btn" id="btn-flip">Flip Board</button>
                 <button class="btn" id="btn-pause">Pause</button>
@@ -36,16 +36,50 @@
     </div>
 </div>
 
-<dialog id="time-modal" class="cyber-modal">
+<dialog id="settings-modal" class="cyber-modal">
     <div class="modal-content">
-        <h2>Set Match Time</h2>
-        <div class="input-group">
-            <input type="number" id="time-input" aria-label="Match time" class="time-input" step="0.1" min="0.1"
-                   value="10">
+        <h2>Match Settings</h2>
+
+        <div class="settings-row">
+            <label for="time-input">Time (Minutes)</label>
+            <input type="number" id="time-input" aria-label="Match time" class="time-input" step="0.1" min="0.1" value="10">
         </div>
+
+        <div class="settings-row">
+            <label for="player-color-select">Play As</label>
+            <select class="ai-select" id="player-color-select">
+                <option value="w">White</option>
+                <option value="b">Black</option>
+            </select>
+        </div>
+
+        <div class="settings-row">
+            <label for="ai-level-select">AI Opponent Level</label>
+            <select class="ai-select" id="ai-level-select">
+                <option value="0">PvP (Player vs Player)</option>
+                <option value="1">Level 1: Novice</option>
+                <option value="2">Level 2: Beginner</option>
+                <option value="3">Level 3: Amateur</option>
+                <option value="4">Level 4: Club Player</option>
+                <option value="5">Level 5: Intermediate</option>
+                <option value="6">Level 6: Advanced</option>
+                <option value="7">Level 7: Expert</option>
+                <option value="8">Level 8: Master</option>
+                <option value="9">Level 9: Grandmaster</option>
+                <option value="10">Level 10: Impossible</option>
+            </select>
+        </div>
+
         <div class="modal-actions">
-            <button class="btn" id="btn-cancel-time">Cancel</button>
-            <button class="btn btn-start" id="btn-confirm-time">Apply</button>
+            <button class="btn" id="btn-cancel-settings">Cancel</button>
+            <button class="btn btn-start" id="btn-confirm-settings">Apply</button>
+        </div>
+    </div>
+</dialog>
+<dialog id="promotion-modal" class="cyber-modal">
+    <div class="modal-content">
+        <h2>Choose Promotion</h2>
+        <div class="promotion-options" id="promotion-options">
         </div>
     </div>
 </dialog>
@@ -58,4 +92,3 @@
 
 </body>
 </html>
-
