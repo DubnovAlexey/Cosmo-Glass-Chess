@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CHESS RENDER MODULE: Board Generation and Tap-to-Move Interaction
+   CHESS RENDER MODULE: 10x10 Grid Framework and Tap-to-Move Interaction
    ========================================================================== */
 
 // 1. DOM ELEMENTS & CONSTANTS
@@ -16,7 +16,7 @@ const PIECE_MAP = {
 
 window.selectedSquare = null;
 
-// 2. BOARD RENDERING
+// 2. 10x10 BOARD GENERATION ENGINE
 function renderBoard() {
     if (!chessboard) return;
     chessboard.innerHTML = '';
@@ -25,49 +25,60 @@ function renderBoard() {
     const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-            // Calculate logical orientation based on board flip status
-            const r = window.isBoardFlipped ? 7 - i : i;
-            const c = window.isBoardFlipped ? 7 - j : j;
+    // Render a 10x10 structural matrix (Rows 0-9, Columns 0-9)
+    for (let y = 0; y < 10; y++) {
+        for (let x = 0; x < 10; x++) {
+            const cell = document.createElement('div');
 
-            const tile = document.createElement('div');
-            tile.className = `board-tile ${(r + c) % 2 === 0 ? 'tile-light' : 'tile-dark'}`;
+            // Determine if the current cell belongs to the outer border rim
+            const isTopBorder = (y === 0);
+            const isBottomBorder = (y === 9);
+            const isLeftBorder = (x === 0);
+            const isRightBorder = (x === 9);
+            const isFrameCell = isTopBorder || isBottomBorder || isLeftBorder || isRightBorder;
 
-            // Fix: Bind data-attributes strictly to physical screen positions to prevent CSS shifting bugs
-            tile.dataset.row = i.toString();
-            tile.dataset.col = j.toString();
+            if (isFrameCell) {
+                // Style as border rim block
+                cell.className = 'board-frame-cell';
 
-            const squareId = files[c] + ranks[r];
-            tile.dataset.square = squareId;
+                // Exclude empty structural corners
+                const isCorner = (y === 0 || y === 9) && (x === 0 || x === 9);
+                if (!isCorner) {
+                    if (isTopBorder || isBottomBorder) {
+                        // Dynamically map letters horizontally according to board orientation
+                        const j = window.isBoardFlipped ? 7 - (x - 1) : (x - 1);
+                        cell.textContent = files[j];
+                    } else if (isLeftBorder || isRightBorder) {
+                        // Dynamically map numbers vertically according to board orientation
+                        const i = window.isBoardFlipped ? 7 - (y - 1) : (y - 1);
+                        cell.textContent = ranks[i];
+                    }
+                }
+                chessboard.appendChild(cell);
+            } else {
+                // Map inner 8x8 space to traditional chess matrix indices
+                const i = y - 1;
+                const j = x - 1;
 
-            const piece = board[r][c];
-            if (piece) {
-                const pDiv = document.createElement('div');
-                const pieceClassName = `${piece.color}_${PIECE_MAP[piece.type]}`;
-                pDiv.className = `chess-piece ${pieceClassName}`;
-                tile.appendChild(pDiv);
+                const r = window.isBoardFlipped ? 7 - i : i;
+                const c = window.isBoardFlipped ? 7 - j : j;
+
+                cell.className = `board-tile ${(r + c) % 2 === 0 ? 'tile-light' : 'tile-dark'}`;
+
+                const squareId = files[c] + ranks[r];
+                cell.dataset.square = squareId;
+
+                const piece = board[r][c];
+                if (piece) {
+                    const pDiv = document.createElement('div');
+                    const pieceClassName = `${piece.color}_${PIECE_MAP[piece.type]}`;
+                    pDiv.className = `chess-piece ${pieceClassName}`;
+                    cell.appendChild(pDiv);
+                }
+
+                cell.addEventListener('click', () => handleSquareClick(squareId));
+                chessboard.appendChild(cell);
             }
-
-            // Fix: Dynamic Chess Notation System (Labels generation)
-            // Left visual edge of the screen chessboard gets rank numbers
-            if (j === 0) {
-                const rankLabel = document.createElement('span');
-                rankLabel.className = 'coordinate rank-coordinate';
-                rankLabel.textContent = ranks[r];
-                tile.appendChild(rankLabel);
-            }
-
-            // Bottom visual edge of the screen chessboard gets file letters
-            if (i === 7) {
-                const fileLabel = document.createElement('span');
-                fileLabel.className = 'coordinate file-coordinate';
-                fileLabel.textContent = files[c];
-                tile.appendChild(fileLabel);
-            }
-
-            tile.addEventListener('click', () => handleSquareClick(squareId));
-            chessboard.appendChild(tile);
         }
     }
 }

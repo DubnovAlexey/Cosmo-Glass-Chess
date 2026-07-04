@@ -110,27 +110,42 @@ body {
 }
 
 /* ==========================================================================
-   3. SOLID MONOLITH CHESSBOARD WITH ADVANCED VOLUME BEVEL ENGINE
+   3. ADVANCED 10x10 SHADOWED CHESSBOARD GRID MATRIX
    ========================================================================== */
 
 .board-wrapper {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    /* 30px outer border tracks for labels, 8 flexible tracks for tiles */
+    grid-template-columns: 30px repeat(8, 1fr) 30px;
+    grid-template-rows: 30px repeat(8, 1fr) 30px;
     width: 100%;
     max-width: 620px;
     aspect-ratio: 1 / 1;
     background: rgba(0, 0, 0, 0.4);
-    border: 30px solid #1c1a27;
     border-radius: 16px;
     position: relative;
-    outline: 1px solid rgba(255, 255, 255, 0.22);
-    outline-offset: 6px;
+    overflow: hidden;
+    /* Massive outer neon bevel shadows requested by user */
     box-shadow:
             0 0 0 6px #0d0c14,
-            0 20px 35px rgba(0, 0, 0, 0.9),
-            0 0 25px rgba(255, 255, 255, 0.32),
-            0 0 55px rgba(255, 255, 255, 0.15),
-            inset 0 0 20px rgba(0, 0, 0, 0.75);
+            0 20px 45px rgba(0, 0, 0, 0.95),
+            0 0 35px rgba(255, 255, 255, 0.25),
+            0 0 65px rgba(255, 255, 255, 0.12),
+            inset 0 0 30px rgba(0, 0, 0, 0.85);
+}
+
+/* Border rim cells look unified with custom bevel backgrounds */
+.board-frame-cell {
+    background-color: #1c1a27;
+    color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    user-select: none;
+    font-family: monospace;
 }
 
 .tile-light { background-color: rgba(255, 255, 255, 0.75); color: #14121f; }
@@ -145,6 +160,10 @@ body {
 }
 
 .board-tile:hover { background-color: rgba(0, 255, 136, 0.2) !important; }
+
+/* Move highlights */
+.highlight-selected { background-color: rgba(0, 255, 136, 0.4) !important; }
+.highlight-move { background-color: rgba(157, 78, 221, 0.4) !important; }
 
 /* ==========================================================================
    4. PIECE RENDERING
@@ -219,37 +238,7 @@ body {
 .b_king   { background-image: url('../assets/images/b_king.svg.webp'); }
 
 /* ==========================================================================
-   7. CHESS NOTATION LABELS STYLING
-   ========================================================================== */
-
-.coordinate {
-    position: absolute;
-    font-size: 0.75rem;
-    font-weight: bold;
-    pointer-events: none;
-    z-index: 3;
-}
-
-.tile-light .coordinate {
-    color: rgba(20, 18, 31, 0.6);
-}
-
-.tile-dark .coordinate {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.rank-coordinate {
-    top: 4px;
-    left: 4px;
-}
-
-.file-coordinate {
-    bottom: 4px;
-    right: 4px;
-}
-
-/* ==========================================================================
-   8. RESPONSIVE MEDIA QUERIES FOR MOBILE DEVICES
+   7. RESPONSIVE MEDIA QUERIES FOR MOBILE DEVICES (STRICT FORCED SQUARE)
    ========================================================================== */
 
 @media (max-width: 768px) {
@@ -268,11 +257,21 @@ body {
         gap: 8px;
     }
 
+    /* Fixed mobile structural bug: force identical width and height via viewport scale units */
     .board-wrapper {
-        border: 12px solid #1c1a27;
-        outline-offset: 4px;
+        grid-template-columns: 20px repeat(8, 1fr) 20px;
+        grid-template-rows: 20px repeat(8, 1fr) 20px;
+        width: 92vw !important;
+        height: 92vw !important;
+        max-width: 92vw !important;
+        max-height: 92vw !important;
     }
 
+    .board-frame-cell {
+        font-size: 0.7rem;
+    }
+
+    /* Vertical clean action list layout for standard thumb tapping */
     .controls-container {
         grid-template-columns: 1fr;
         gap: 8px;
