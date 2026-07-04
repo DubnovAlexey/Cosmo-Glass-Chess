@@ -110,14 +110,13 @@ body {
 }
 
 /* ==========================================================================
-   3. ADVANCED 10x10 SHADOWED CHESSBOARD GRID MATRIX
+   3. ADVANCED 10x10 SHADOWED CHESSBOARD GRID MATRIX (PERCENTAGE BASED)
    ========================================================================== */
 
 .board-wrapper {
     display: grid;
-    /* 30px outer border tracks for labels, 8 flexible tracks for tiles */
-    grid-template-columns: 30px repeat(8, 1fr) 30px;
-    grid-template-rows: 30px repeat(8, 1fr) 30px;
+    grid-template-columns: 6% repeat(8, 11%) 6%;
+    grid-template-rows: 6% repeat(8, 11%) 6%;
     width: 100%;
     max-width: 620px;
     aspect-ratio: 1 / 1;
@@ -125,7 +124,6 @@ body {
     border-radius: 16px;
     position: relative;
     overflow: hidden;
-    /* Massive outer neon bevel shadows requested by user */
     box-shadow:
             0 0 0 6px #0d0c14,
             0 20px 45px rgba(0, 0, 0, 0.95),
@@ -134,7 +132,6 @@ body {
             inset 0 0 30px rgba(0, 0, 0, 0.85);
 }
 
-/* Border rim cells look unified with custom bevel backgrounds */
 .board-frame-cell {
     background-color: #1c1a27;
     color: rgba(255, 255, 255, 0.5);
@@ -188,7 +185,7 @@ body {
 }
 
 /* ==========================================================================
-   5. FOOTER CONTROLS
+   5. FOOTER CONTROLS (SYMMETRY FIX)
    ========================================================================== */
 
 .controls-container {
@@ -215,6 +212,13 @@ body {
 .btn:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Stretching the MAIN start button across all available columns */
+.controls-container .btn-start {
+    grid-column: 1 / -1;
+    padding: 14px;
+    font-size: 1.05rem;
 }
 
 .btn-start { background: #00ff88; color: #000000; border: none; }
@@ -257,23 +261,21 @@ body {
         gap: 8px;
     }
 
-    /* Fixed mobile structural bug: force identical width and height via viewport scale units */
     .board-wrapper {
-        grid-template-columns: 20px repeat(8, 1fr) 20px;
-        grid-template-rows: 20px repeat(8, 1fr) 20px;
-        width: 92vw !important;
-        height: 92vw !important;
-        max-width: 92vw !important;
-        max-height: 92vw !important;
+        width: 95vw !important;
+        height: 95vw !important;
+        max-width: 95vw !important;
+        max-height: 95vw !important;
+        grid-template-columns: 6% repeat(8, 11%) 6%;
+        grid-template-rows: 6% repeat(8, 11%) 6%;
     }
 
     .board-frame-cell {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
     }
 
-    /* Vertical clean action list layout for standard thumb tapping */
     .controls-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 8px;
     }
 
