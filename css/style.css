@@ -20,7 +20,7 @@ body {
     /* NEW: Multiple backgrounds (Dark semi-transparent gradient overlay + Space image) */
     background:
             radial-gradient(circle at center, #2c1a4d 0%, #05040a 100%),
-            url('../assets/images/space-bg.jpg');
+            url('../assets/images/space-bg.webp');
     background-blend-mode: screen;
     background-size: cover;
     background-position: center;
