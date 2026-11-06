@@ -35,3 +35,7 @@ The engine runs in a Web Worker, so open the page through a local web server (fo
 
 - This board, its style and the engine move into the chess game of my Cosmo Game Hub.
 - Move history with notation (PGN) and undo.
+
+## Engine regression checks
+
+`node --test tests/engine-races.test.cjs` checks delayed moves across restart, pause/resume, position changes and page disposal. BFCache restoration restarts the current AI turn once and rejects callbacks from the old worker. UCI searches are serialized; an obsolete engine answer cannot change a new match.

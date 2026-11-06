@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     btnRestart.addEventListener('click', () => {
+        window.cancelEngineSearch?.();
         window.game.reset();
         window.isGameActive = false;
         clearInterval(window.timerInterval);
@@ -111,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnPause.addEventListener('click', () => {
         if (window.isGameActive) {
+            window.cancelEngineSearch?.();
             window.isGameActive = false;
             btnPause.textContent = 'Resume';
         } else {

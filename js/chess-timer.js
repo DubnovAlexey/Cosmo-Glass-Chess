@@ -43,6 +43,7 @@ window.startTimerCountdown = function() {
 };
 
 window.endGame = function(message) {
+    window.cancelEngineSearch?.();
     clearInterval(window.timerInterval);
     window.isGameActive = false;
 
