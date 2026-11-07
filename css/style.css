@@ -474,3 +474,18 @@ body {
         letter-spacing: 3px;
     }
 }
+
+/* Source code link — a glass button with the neon green-violet edge of the title */
+.repo-link {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #e5e7eb;
+    border-image: linear-gradient(90deg, #00ff88, #9d4ede) 1;
+}
+
+.repo-link:hover,
+.repo-link:focus-visible {
+    color: #00ff88;
+    outline: none;
+}
